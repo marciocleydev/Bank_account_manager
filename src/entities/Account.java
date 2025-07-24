@@ -1,9 +1,12 @@
 package entities;
 
+import modelExceptions.DomainException;
+
 public class Account {
     private int number;
     private String holder;
     private double balance;
+    private double withdrawLimit = 2000.00;
 
     public Account(int number, String holder) {
         this.number = number;
@@ -33,12 +36,16 @@ public class Account {
         this.balance += amount;
     }
 
-    public void withdraw(double amount) {
+    public void withdraw(double amount) throws DomainException{
         double tax = 5.0;
-        if (amount <= (balance - tax))
+        if (amount > withdrawLimit){
+            throw new DomainException("daily withdrawal limit is only 2000");
+        }
+        if (amount <= (balance - tax)) {
             this.balance -= amount + tax;
+        }
         else {
-            System.out.println(" you don't have money enough");
+            throw new DomainException(" you don't have money enough");
         }
     }
 
